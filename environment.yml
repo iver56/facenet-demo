@@ -13,3 +13,8 @@ dependencies:
 - setuptools=36.4.0
 - six=1.10.0
 - zlib=1.2.11
+- pip:
+  - Keras==2.1.4
+  - keras_vggface
+  - pillow
+  - tensorflow==1.6.0rc1
