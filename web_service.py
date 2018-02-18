@@ -1,7 +1,10 @@
-from flask import Flask, send_from_directory
+from flask import Flask, request
 from flask import jsonify
 
+from predict import Classifier
+
 app = Flask(__name__, static_folder='web_app')
+classifier = Classifier()
 
 
 @app.route('/')
@@ -11,8 +14,12 @@ def root():
 
 @app.route("/classify/", methods=['POST'])
 def classify():
+    base64_png = request.json.get('base64_png', None)
+    if base64_png is None:
+        raise Exception('Invalid base64')
+    predictions = classifier.predict(base64_png)
     return jsonify({
-        'predictions': []
+        'predictions': str(predictions)
     })
 
 
@@ -25,5 +32,5 @@ def static_proxy(path):
 if __name__ == "__main__":
     app.run(
         host='0.0.0.0',
-        debug=True
+        debug=False  # Tensorflow may throw a tantrum if debug=True, due to multiple threads then
     )
