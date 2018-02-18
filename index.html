@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         video, img {
-            max-width:100%;
+            max-width: 100%;
         }
     </style>
 </head>
@@ -15,7 +15,7 @@
 <video autoplay></video>
 
 <script>
-    (function() {
+    (function () {
         'use strict';
         var video = document.querySelector('video')
             , canvas;
@@ -45,14 +45,14 @@
         // docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         if (navigator.mediaDevices) {
             // access the web cam
-            navigator.mediaDevices.getUserMedia({video: true})
+            navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}})
             // permission granted:
-                .then(function(stream) {
+                .then(function (stream) {
                     video.srcObject = stream;
                     video.addEventListener('click', takeSnapshot);
                 })
                 // permission denied:
-                .catch(function(error) {
+                .catch(function (error) {
                     document.body.textContent = 'Could not access the camera. Error: ' + error.name;
                 });
         }
