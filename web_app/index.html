@@ -57,9 +57,21 @@
             );
 
             const dataUrl = canvas.toDataURL('image/png');
-            console.log(dataUrl);
             img.src = dataUrl;
             document.body.appendChild(img);
+            const base64Png = dataUrl.replace('data:image/png;base64,', '');
+            $.ajax({
+                url: "/classify/",
+                type: "POST",
+                data: JSON.stringify({base64_png: base64Png}),
+                dataType: "json",
+                contentType: 'application/json'
+            }).done(function(response) {
+                console.log(response, 'is my response')
+            }).fail(function(response) {
+                alert('Server communication error');
+                console.error(response);
+            });
         }
 
         // Use the MediaDevices API
