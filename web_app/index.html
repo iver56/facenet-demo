@@ -9,7 +9,9 @@
 
     <style>
         video, img {
-            max-width: 100%;
+            width: 448px;
+            height: 448px;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -20,7 +22,7 @@
 <script>
     (function () {
         'use strict';
-        var video = document.querySelector('video')
+        let video = document.querySelector('video')
             , canvas;
 
         /**
@@ -28,35 +30,50 @@
          *  appends the image to the <body>
          */
         function takeSnapshot() {
-            var img = document.querySelector('img') || document.createElement('img');
-            var context;
-            var width = video.offsetWidth
-                , height = video.offsetHeight;
+            const img = document.querySelector('img') || document.createElement('img');  // select existing or make new
+            const videoWidth = video.videoWidth;
+            const videoHeight = video.videoHeight;
+            const minVideoDim = Math.min(video.videoWidth, video.videoHeight);
+            const xDiff = videoWidth - minVideoDim;
+            const xOffset = xDiff / 2;
+            const yDiff = videoHeight - minVideoDim;
+            const yOffset = yDiff / 2;
 
             canvas = canvas || document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = minVideoDim;
+            canvas.height = minVideoDim;
 
-            context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, width, height);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(
+                video,  // drawable source
+                xOffset,  // source offset x
+                yOffset,  // source offset y
+                minVideoDim,  // source width
+                minVideoDim,  // source height
+                0,  // destination offset x
+                0,  // destination offset y
+                minVideoDim,  // destination width
+                minVideoDim  // destination height
+            );
 
-            const dataURL = canvas.toDataURL('image/png');
-            img.src = dataURL;
+            const dataUrl = canvas.toDataURL('image/png');
+            console.log(dataUrl);
+            img.src = dataUrl;
             document.body.appendChild(img);
         }
 
-        // use MediaDevices API
-        // docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+        // Use the MediaDevices API
+        // Docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
         if (navigator.mediaDevices) {
-            // access the web cam
+            // Access the camera
             navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}})
-            // permission granted:
                 .then(function (stream) {
+                    // permission granted
                     video.srcObject = stream;
                     video.addEventListener('click', takeSnapshot);
                 })
-                // permission denied:
                 .catch(function (error) {
+                    // permission denied
                     document.body.textContent = 'Could not access the camera. Error: ' + error.name;
                 });
         }
