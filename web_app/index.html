@@ -68,6 +68,7 @@
                 contentType: 'application/json'
             }).done(function(response) {
                 console.log(response, 'is my response')
+                alert(response.predictions)
             }).fail(function(response) {
                 alert('Server communication error');
                 console.error(response);
