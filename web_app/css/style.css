@@ -28,4 +28,19 @@ html, body {
 
 .snapshot.active {
     z-index: 2;
+    animation: snapshot-animation 5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes snapshot-animation {
+    0% {
+        transform: rotate(0deg);
+        filter: brightness(500%);
+    }
+    5% {
+        filter: brightness(100%)
+    }
+    100% {
+        transform: rotate(-12deg);
+    }
 }

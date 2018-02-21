@@ -38,6 +38,7 @@
     const dataUrl = canvas.toDataURL('image/png');
     $img.attr('src', dataUrl);
     $img.addClass('active');
+    $(video).hide();
     const base64Png = dataUrl.replace('data:image/png;base64,', '');
     $.ajax({
       url: "/classify/",
