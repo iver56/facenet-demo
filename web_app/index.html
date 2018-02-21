@@ -8,16 +8,45 @@
     <script src="lib/jquery-3.3.1.js"></script>
 
     <style>
-        video, img {
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .snapshot {
+            z-index: 0;
+        }
+
+        .webcam {
+            z-index: 1;
+        }
+
+        .webcam, .snapshot {
             width: 448px;
             height: 448px;
             object-fit: cover;
+            position: absolute;
+            transition: filter;
+        }
+
+        .snapshot.active {
+            z-index: 2;
         }
     </style>
 </head>
 <body>
 
-<video autoplay></video>
+<div class="wrapper">
+    <video autoplay class="webcam"></video>
+    <img class="snapshot" src="img/transparent.gif">
+</div>
 
 <script>
     (function () {
@@ -30,7 +59,8 @@
          *  appends the image to the <body>
          */
         function takeSnapshot() {
-            const img = document.querySelector('img') || document.createElement('img');  // select existing or make new
+            video.pause();
+            const $img = $('img.snapshot');
             const videoWidth = video.videoWidth;
             const videoHeight = video.videoHeight;
             const minVideoDim = Math.min(video.videoWidth, video.videoHeight);
@@ -57,8 +87,8 @@
             );
 
             const dataUrl = canvas.toDataURL('image/png');
-            img.src = dataUrl;
-            document.body.appendChild(img);
+            $img.attr('src', dataUrl);
+            $img.addClass('active');
             const base64Png = dataUrl.replace('data:image/png;base64,', '');
             $.ajax({
                 url: "/classify/",
