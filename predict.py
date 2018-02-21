@@ -1,6 +1,7 @@
 import os
 
 import numpy as np
+import time
 from keras.preprocessing import image
 from keras.utils.data_utils import get_file
 from keras_vggface import utils
@@ -16,6 +17,7 @@ class Classifier:
 
     def __init__(self):
         self.model = VGGFace(model='resnet50')
+        self.model.summary()
         self.labels = self.load_labels()
         self.images_references = self.load_image_references()
 
@@ -33,7 +35,9 @@ class Classifier:
         x = image.img_to_array(that_image)
         x = np.expand_dims(x, axis=0)
         x = utils.preprocess_input(x, version=2)  # version=2 is valid for resnet50
+        run_start_time = time.time()
         predictions = self.model.predict(x)
+        print("Prediction execution time: {0:.2f} seconds".format(time.time() - run_start_time))
         prediction = predictions[0]
         decoded_prediction = self.decode_prediction(prediction)
 
