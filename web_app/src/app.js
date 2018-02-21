@@ -66,7 +66,13 @@
       .then(function (stream) {
         // permission granted
         video.srcObject = stream;
-        video.addEventListener('click', takeSnapshot);
+
+        document.addEventListener('keydown', (event) => {
+          if (event.keyCode === 32) {
+            event.preventDefault();
+            takeSnapshot();
+          }
+        });
       })
       .catch(function (error) {
         // permission denied
