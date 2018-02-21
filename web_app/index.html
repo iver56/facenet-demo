@@ -2,44 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HTML5 Media Device Access</title>
+    <title>Who is your celebrity look-alike?</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+
     <script src="lib/jquery-3.3.1.js"></script>
-
-    <style>
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .snapshot {
-            z-index: 0;
-        }
-
-        .webcam {
-            z-index: 1;
-        }
-
-        .webcam, .snapshot {
-            width: 448px;
-            height: 448px;
-            object-fit: cover;
-            position: absolute;
-            transition: filter;
-        }
-
-        .snapshot.active {
-            z-index: 2;
-        }
-    </style>
 </head>
 <body>
 
