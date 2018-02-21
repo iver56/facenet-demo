@@ -4,10 +4,20 @@ html, body {
     overflow: hidden;
 }
 
+@font-face {
+    font-family: norwester;
+    src: url(norwester.woff);
+    font-weight:400;
+}
+
+body {
+    font-family: norwester, georgia, serif;
+}
+
 .wrapper {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 40vw;
+    height: 40vw;
 }
 
 .snapshot {
@@ -19,8 +29,8 @@ html, body {
 }
 
 .webcam, .snapshot {
-    width: 448px;
-    height: 448px;
+    width: 40vw;
+    height: 40vw;
     object-fit: cover;
     position: absolute;
     transition: filter;
@@ -41,6 +51,6 @@ html, body {
         filter: brightness(100%)
     }
     100% {
-        transform: rotate(-8deg);
+        transform: rotate(-6deg);
     }
 }
