@@ -21,7 +21,7 @@ body {
 }
 
 .snapshot {
-    z-index: 0;
+    z-index: 2;
 }
 
 .webcam {
@@ -37,7 +37,6 @@ body {
 }
 
 .snapshot.active {
-    z-index: 2;
     animation: snapshot-animation 5s;
     animation-fill-mode: forwards;
 }
