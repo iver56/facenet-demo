@@ -41,6 +41,6 @@ html, body {
         filter: brightness(100%)
     }
     100% {
-        transform: rotate(-12deg);
+        transform: rotate(-8deg);
     }
 }

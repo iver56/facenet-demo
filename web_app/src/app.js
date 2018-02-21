@@ -2,6 +2,7 @@
   'use strict';
   let video = document.querySelector('video')
     , canvas;
+  const snapshotSound = document.getElementById('snapshot-sound');
 
   /**
    *  generates a still frame image from the stream in the <video>
@@ -38,6 +39,8 @@
     const dataUrl = canvas.toDataURL('image/png');
     $img.attr('src', dataUrl);
     $img.addClass('active');
+    snapshotSound.play();
+
     $(video).hide();
     const base64Png = dataUrl.replace('data:image/png;base64,', '');
     $.ajax({
