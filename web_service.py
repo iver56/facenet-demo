@@ -1,7 +1,10 @@
-from flask import Flask, request
+import os
+
+from flask import Flask, request, send_file
 from flask import jsonify
 
 from predict import Classifier
+from settings import VGGFACE2_TRAIN_PATH
 
 app = Flask(__name__, static_folder='web_app')
 classifier = Classifier()
@@ -21,6 +24,11 @@ def classify():
     return jsonify({
         'predictions': str(predictions)
     })
+
+
+@app.route('/celebrities/<path:path>')
+def static_celebrities_proxy(path):
+    return send_file(os.path.join(VGGFACE2_TRAIN_PATH, path))
 
 
 @app.route('/<path:path>')
