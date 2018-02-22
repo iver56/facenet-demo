@@ -5,7 +5,9 @@
   const snapshotSound = document.getElementById('snapshot-sound');
   const $snapshotImg = $('img.snapshot');
   const $lookAlikeImg = $('img.look-alike');
-  const $callToActionParagraph = $('p.call-to-action');
+  const $callToActionParagraph = $('.call-to-action');
+  const $youLookLikeParagraph = $('.you-look-like');
+  const $celebrityNameParagraph = $('.celebrity-name');
   /**
    *  generates a still frame image from the stream in the <video>
    *  appends the image to the <body>
@@ -40,6 +42,7 @@
     const dataUrl = canvas.toDataURL('image/png');
     $snapshotImg.attr('src', dataUrl);
     $snapshotImg.addClass('active');
+    $lookAlikeImg.addClass('active');
     snapshotSound.play();
     $callToActionParagraph.fadeOut(800);
 
@@ -52,12 +55,15 @@
       dataType: "json",
       contentType: 'application/json'
     }).done(function(response) {
-      $lookAlikeImg.addClass('active');
       if (response && response.predictions && response.predictions.length) {
         const prediction = response.predictions[0];
         if (prediction.image_references && prediction.image_references.length) {
           const imageReference = prediction.image_references[0];
           $lookAlikeImg.attr('src', `/celebrities/${imageReference[0]}/${imageReference[1]}`);
+          setTimeout(() => {
+            $celebrityNameParagraph.text(prediction.name).fadeIn();
+            $youLookLikeParagraph.fadeIn();
+          }, 1500)
         }
       }
       //alert(response.predictions)

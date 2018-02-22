@@ -14,13 +14,34 @@ body {
     font-family: norwester, georgia, serif;
 }
 
-header {
+h1 {
     text-align: center;
+    font-size: 3.6vw;
 }
 
 p {
+    font-size: 1.9vw;
     text-align: center;
+}
+
+p.call-to-action {
     margin-top: 2rem;
+}
+
+p.you-look-like {
+    display: none;
+    position: absolute;
+    width: 36vw;
+    top: 36vw;
+    left: -22vw;
+}
+
+p.celebrity-name {
+    display: none;
+    position: absolute;
+    width: 36vw;
+    top: 36vw;
+    left: 22vw;
 }
 
 .wrapper {
@@ -28,8 +49,8 @@ p {
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    width: 40vw;
-    height: 40vw;
+    width: 36vw;
+    height: 36vw;
 }
 
 .snapshot {
@@ -45,8 +66,8 @@ p {
 }
 
 .webcam, .snapshot, .look-alike {
-    width: 40vw;
-    height: 40vw;
+    width: 36vw;
+    height: 36vw;
     object-fit: cover;
     position: absolute;
 }
