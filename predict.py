@@ -49,7 +49,7 @@ class Classifier:
         celebrities = [
             {
                 'name': self.labels[i],
-                'score': prediction[i],
+                'score': float(prediction[i]),
                 'image_references': self.images_references[i]
             }
             for i in top_indices

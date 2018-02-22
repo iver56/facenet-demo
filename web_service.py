@@ -22,7 +22,7 @@ def classify():
         raise Exception('Invalid base64')
     predictions = classifier.predict(base64_png)
     return jsonify({
-        'predictions': str(predictions)
+        'predictions': predictions
     })
 
 
