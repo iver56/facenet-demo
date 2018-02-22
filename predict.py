@@ -1,15 +1,11 @@
-import os
+import time
 
 import numpy as np
-import time
 from keras.preprocessing import image
-from keras.utils.data_utils import get_file
 from keras_vggface import utils
-from keras_vggface.utils import V2_LABELS_PATH, VGGFACE_DIR
 from keras_vggface.vggface import VGGFace
 
-import settings
-from helpers import base64_png_image_to_pillow_image
+from helpers import base64_png_image_to_pillow_image, load_image_references, load_labels
 
 
 class Classifier:
@@ -18,8 +14,8 @@ class Classifier:
     def __init__(self):
         self.model = VGGFace(model='resnet50')
         self.model.summary()
-        self.labels = self.load_labels()
-        self.images_references = self.load_image_references()
+        self.labels = load_labels()
+        self.images_references = load_image_references()
 
     def predict(self, base64_png):
         # Convert base64 to Pillow image instance
@@ -56,31 +52,3 @@ class Classifier:
         ]
         celebrities.sort(key=lambda x: x['score'], reverse=True)
         return celebrities
-
-    @staticmethod
-    def load_labels():
-        file_path = get_file('rcmalli_vggface_labels_v2.npy', V2_LABELS_PATH, cache_subdir=VGGFACE_DIR)
-        labels = np.load(file_path)
-        labels = [label.replace('_', ' ').strip() for label in labels]
-        return labels
-
-    @staticmethod
-    def load_image_references():
-        folder_filename_tuples = []  # a list with ordered lists of (folder, filename) tuples
-
-        train_list_file_path = os.path.join(settings.VGGFACE2_META_PATH, 'train_list.txt')
-        with open(train_list_file_path, 'r') as text_file:
-            lines = text_file.readlines()
-        lines = [line.strip() for line in lines]
-
-        current_folder = None
-        for line in lines:
-            folder, filename = line.split('/')
-            if current_folder != folder:
-                folder_filename_tuples.append([])
-
-            current_folder = folder
-            folder_filename_tuples[-1].append((folder, filename))
-
-        assert len(folder_filename_tuples) == 8631
-        return folder_filename_tuples
