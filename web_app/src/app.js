@@ -3,14 +3,15 @@
   let video = document.querySelector('video')
     , canvas;
   const snapshotSound = document.getElementById('snapshot-sound');
-
+  const $snapshotImg = $('img.snapshot');
+  const $lookAlikeImg = $('img.look-alike');
+  const $callToActionParagraph = $('p.call-to-action');
   /**
    *  generates a still frame image from the stream in the <video>
    *  appends the image to the <body>
    */
   function takeSnapshot() {
     video.pause();
-    const $img = $('img.snapshot');
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
     const minVideoDim = Math.min(video.videoWidth, video.videoHeight);
@@ -37,9 +38,10 @@
     );
 
     const dataUrl = canvas.toDataURL('image/png');
-    $img.attr('src', dataUrl);
-    $img.addClass('active');
+    $snapshotImg.attr('src', dataUrl);
+    $snapshotImg.addClass('active');
     snapshotSound.play();
+    $callToActionParagraph.fadeOut(800);
 
     $(video).hide();
     const base64Png = dataUrl.replace('data:image/png;base64,', '');
@@ -50,8 +52,15 @@
       dataType: "json",
       contentType: 'application/json'
     }).done(function(response) {
-      console.log(response, 'is my response')
-      alert(response.predictions)
+      $lookAlikeImg.addClass('active');
+      if (response && response.predictions && response.predictions.length) {
+        const prediction = response.predictions[0];
+        if (prediction.image_references && prediction.image_references.length) {
+          const imageReference = prediction.image_references[0];
+          $lookAlikeImg.attr('src', `/celebrities/${imageReference[0]}/${imageReference[1]}`);
+        }
+      }
+      //alert(response.predictions)
     }).fail(function(response) {
       alert('Server communication error');
       console.error(response);

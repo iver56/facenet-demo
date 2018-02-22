@@ -14,7 +14,19 @@ body {
     font-family: norwester, georgia, serif;
 }
 
+header {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    margin-top: 2rem;
+}
+
 .wrapper {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     position: relative;
     width: 40vw;
     height: 40vw;
@@ -28,16 +40,24 @@ body {
     z-index: 1;
 }
 
-.webcam, .snapshot {
+.look-alike {
+    z-index: 1;
+}
+
+.webcam, .snapshot, .look-alike {
     width: 40vw;
     height: 40vw;
     object-fit: cover;
     position: absolute;
-    transition: filter;
 }
 
 .snapshot.active {
-    animation: snapshot-animation 5s;
+    animation: snapshot-animation 2s;
+    animation-fill-mode: forwards;
+}
+
+.look-alike.active {
+    animation: look-alike-animation 2s;
     animation-fill-mode: forwards;
 }
 
@@ -45,11 +65,32 @@ body {
     0% {
         transform: rotate(0deg);
         filter: brightness(500%);
+        left: 0;
     }
-    5% {
+    9% {
         filter: brightness(100%)
     }
-    100% {
+    70% {
         transform: rotate(-6deg);
+        left: 0;
+    }
+    100% {
+        transform: rotate(-360deg);
+        left: -22vw;
+    }
+}
+
+@keyframes look-alike-animation {
+    0% {
+        transform: rotate(0deg);
+        left: 0;
+    }
+    70% {
+        transform: rotate(-6deg);
+        left: 0;
+    }
+    100% {
+        transform: rotate(360deg);
+        left: 22vw;
     }
 }
