@@ -4,10 +4,29 @@ import os
 
 import numpy as np
 from PIL import Image
+from keras.preprocessing.image import img_to_array
 from keras.utils.data_utils import get_file
+from keras_vggface import utils
 from keras_vggface.utils import V2_LABELS_PATH, VGGFACE_DIR
+from resizeimage.resizeimage import resize_cover
 
 import settings
+
+
+def load_image_from_disk(file_path):
+    that_image = Image.open(file_path)
+
+    # Resize image
+    that_image = resize_cover(that_image, settings.DESIRED_DIMENSIONS, validate=False)
+
+    # Remove alpha channel
+    that_image = that_image.convert('RGB')
+
+    # Convert the PIL image to a numpy array
+    x = img_to_array(that_image)
+    x = np.expand_dims(x, axis=0)
+    x = utils.preprocess_input(x, version=2)  # version=2 is valid for resnet50
+    return x[0]
 
 
 def base64_png_image_to_pillow_image(base64_string):
