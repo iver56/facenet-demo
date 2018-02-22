@@ -8,9 +8,14 @@
   const $callToActionParagraph = $('.call-to-action');
   const $youLookLikeParagraph = $('.you-look-like');
   const $celebrityNameParagraph = $('.celebrity-name');
+
+  /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+  particlesJS.load('body', 'style/particlesjs-config.json', function() {
+    console.log('callback - particles.js config loaded');
+  });
+
   /**
-   *  generates a still frame image from the stream in the <video>
-   *  appends the image to the <body>
+   *  Generates a still frame image from the stream in the <video>
    */
   function takeSnapshot() {
     video.pause();

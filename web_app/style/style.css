@@ -12,6 +12,16 @@ html, body {
 
 body {
     font-family: norwester, georgia, serif;
+    margin: 0;
+    color: white;
+    background-color: #0D5080;
+    position: relative;
+}
+
+.particles-js-canvas-el {
+    z-index: -1;
+    position: absolute;
+    top: 0;
 }
 
 h1 {
