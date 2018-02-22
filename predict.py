@@ -6,11 +6,10 @@ from keras_vggface import utils
 from keras_vggface.vggface import VGGFace
 
 from helpers import base64_png_image_to_pillow_image, load_image_references, load_labels
+from settings import DESIRED_DIMENSIONS
 
 
 class Classifier:
-    DESIRED_DIMENSIONS = (224, 224)
-
     def __init__(self):
         self.model = VGGFace(model='resnet50')
         self.model.summary()
@@ -22,7 +21,7 @@ class Classifier:
         that_image = base64_png_image_to_pillow_image(base64_png)
 
         # Resize image
-        that_image.thumbnail(self.DESIRED_DIMENSIONS)
+        that_image.thumbnail(DESIRED_DIMENSIONS)
 
         # Remove alpha channel
         that_image = that_image.convert('RGB')
