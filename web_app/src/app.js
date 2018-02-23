@@ -8,6 +8,7 @@
   const $callToActionParagraph = $('.call-to-action');
   const $youLookLikeParagraph = $('.you-look-like');
   const $celebrityNameParagraph = $('.celebrity-name');
+  let isReadyForSnapshot = true;
 
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
   particlesJS.load('body', 'style/particlesjs-config.json', function() {});
@@ -21,13 +22,18 @@
     $celebrityNameParagraph.fadeOut();
     setTimeout(() => {
       $callToActionParagraph.fadeIn(800);
-    }, 400)
+    }, 400);
+    isReadyForSnapshot = true;
   }
 
   /**
    *  Generates a still frame image from the stream in the <video>
    */
   function takeSnapshot() {
+    if (!isReadyForSnapshot) {
+      return;
+    }
+    isReadyForSnapshot = false;
     video.pause();
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
