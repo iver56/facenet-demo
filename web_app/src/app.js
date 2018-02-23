@@ -59,23 +59,24 @@
       contentType: 'application/json'
     }).done(function(response) {
       if (response && response.predictions && response.predictions.length) {
-        let closestDistance = Infinity;
-        let bestPrediction = response.predictions[0];
-        for (let i = 0; i < response.predictions.length; i++) {
-          const prediction = response.predictions[i];
-          if (prediction.closest_image_distance < closestDistance) {
-            closestDistance = prediction.closest_image_distance;
-            bestPrediction = prediction;
+        const sequence = (initZIndexes = true, offset = 1500) => {
+          for (let i = 0; i < response.predictions.length; i++) {
+            const prediction = response.predictions[i];
+            if (initZIndexes) {
+              $lookAlikeImg.eq(i).attr('src', prediction.closest_image).css('z-index', i === 0 ? 1 : 0);
+            }
+            setTimeout(() => {
+              $lookAlikeImg.css('z-index', 0);
+              $lookAlikeImg.eq(i).css('z-index', 1);
+              $celebrityNameParagraph.text(response.predictions[i].name).fadeIn(400);
+              $youLookLikeParagraph.fadeIn(400);
+              if (i === response.predictions.length - 1) {
+                sequence(false, 2500);
+              }
+            }, offset + 2500 * i);
           }
-        }
-
-        if (bestPrediction.closest_image) {
-          $lookAlikeImg.attr('src', bestPrediction.closest_image);
-          setTimeout(() => {
-            $celebrityNameParagraph.text(bestPrediction.name).fadeIn();
-            $youLookLikeParagraph.fadeIn();
-          }, 1500)
-        }
+        };
+        sequence();
       }
     }).fail(function(response) {
       alert('Server communication error');

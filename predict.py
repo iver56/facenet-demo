@@ -60,7 +60,7 @@ class Classifier:
                 'closest_image': closest_image_url
             }
             celebrities.append(celebrity)
-        celebrities.sort(key=lambda x: x['score'], reverse=True)
+        celebrities.sort(key=lambda x: x['closest_image_distance'])
         return celebrities
 
     def get_closest_celebrity_image(self, image_references, input_feature_vectors):
