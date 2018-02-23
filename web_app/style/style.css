@@ -5,13 +5,16 @@ html, body {
 }
 
 @font-face {
-    font-family: norwester;
-    src: url(norwester.woff);
-    font-weight:400;
+    font-family: BebasNeueBold;
+    src: url('BebasNeue Bold.otf');
+}
+
+@font-face {
+    font-family: BebasNeueRegular;
+    src: url('BebasNeue Regular.otf');
 }
 
 body {
-    font-family: norwester, georgia, serif;
     margin: 0;
     color: white;
     background-color: #0D5080;
@@ -25,12 +28,16 @@ body {
 }
 
 h1 {
+    font-family: BebasNeueBold, georgia, serif;
     text-align: center;
     font-size: 3.6vw;
+    letter-spacing: 0.18vw;
 }
 
 p {
-    font-size: 1.9vw;
+    font-family: BebasNeueRegular, georgia, serif;
+    letter-spacing: 0.1vw;
+    font-size: 2.5vw;
     text-align: center;
 }
 
@@ -42,7 +49,7 @@ p.you-look-like {
     display: none;
     position: absolute;
     width: 36vw;
-    top: 36vw;
+    top: 35.5vw;
     left: -22vw;
 }
 
@@ -50,7 +57,7 @@ p.celebrity-name {
     display: none;
     position: absolute;
     width: 36vw;
-    top: 36vw;
+    top: 35.5vw;
     left: 22vw;
 }
 
