@@ -12,6 +12,18 @@
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
   particlesJS.load('body', 'style/particlesjs-config.json', function() {});
 
+  function reset() {
+    $snapshotImg.removeClass('active').attr('src', 'img/head_outline.png');
+    $lookAlikeImg.removeClass('active').attr('src', 'img/transparent.gif');
+    video.play();
+    $(video).fadeIn();
+    $youLookLikeParagraph.fadeOut();
+    $celebrityNameParagraph.fadeOut();
+    setTimeout(() => {
+      $callToActionParagraph.fadeIn(800);
+    }, 400)
+  }
+
   /**
    *  Generates a still frame image from the stream in the <video>
    */
@@ -70,11 +82,15 @@
               $lookAlikeImg.eq(i).css('z-index', 1);
               $celebrityNameParagraph.text(response.predictions[i].name).fadeIn(400);
               $youLookLikeParagraph.fadeIn(400);
+
+              /*
               if (i === response.predictions.length - 1) {
                 sequence(false, 2500);
               }
+              */
             }, offset + 2500 * i);
           }
+          setTimeout(reset, offset + 2500 * response.predictions.length);
         };
         sequence();
       }
