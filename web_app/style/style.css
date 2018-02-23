@@ -75,6 +75,12 @@ p.celebrity-name {
     z-index: 1;
 }
 
+.webcam, .snapshot {
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+    -moz-transform: rotateY(180deg); /* Firefox */
+}
+
 .webcam, .snapshot, .look-alike {
     width: 36vw;
     height: 36vw;
