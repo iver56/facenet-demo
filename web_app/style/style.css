@@ -70,6 +70,13 @@ p.celebrity-name {
     height: 36vw;
 }
 
+.video-wrapper {
+    position: absolute;
+    width: 36vw;
+    height: 36vw;
+    overflow: hidden;
+}
+
 .snapshot {
     z-index: 2;
 }
