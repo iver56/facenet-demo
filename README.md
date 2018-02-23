@@ -7,7 +7,8 @@
 * `conda env create`
 * Download and unzip the training dataset and the metadata at [http://zeus.robots.ox.ac.uk/vgg_face2/](http://zeus.robots.ox.ac.uk/vgg_face2/). Warning: Downloading and unzipping will take hours.
 * Update the paths in settings.py
-* Calculate feature descriptors, needed for finding the most similar face after celebrity classification: `calculate_feature_descriptors.py`. Warning: This will take ~10 hours on a GTX 1070.
+* Calculate feature descriptors, needed for finding the most similar face after celebrity classification: `python calculate_feature_descriptors.py`. Warning: This will take ~10 hours on a GTX 1070.
+* Calculate image resolutions: `python calculate_image_dimensions.py`
 
 # Usage
 * Start the web server: `python web_service.py` and visit localhost:5000 in your browser
