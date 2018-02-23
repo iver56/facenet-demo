@@ -10,9 +10,7 @@
   const $celebrityNameParagraph = $('.celebrity-name');
 
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-  particlesJS.load('body', 'style/particlesjs-config.json', function() {
-    console.log('callback - particles.js config loaded');
-  });
+  particlesJS.load('body', 'style/particlesjs-config.json', function() {});
 
   /**
    *  Generates a still frame image from the stream in the <video>
@@ -61,17 +59,24 @@
       contentType: 'application/json'
     }).done(function(response) {
       if (response && response.predictions && response.predictions.length) {
-        const prediction = response.predictions[0];
-        if (prediction.image_references && prediction.image_references.length) {
-          const imageReference = prediction.image_references[0];
-          $lookAlikeImg.attr('src', `/celebrities/${imageReference[0]}/${imageReference[1]}`);
+        let closestDistance = Infinity;
+        let bestPrediction = response.predictions[0];
+        for (let i = 0; i < response.predictions.length; i++) {
+          const prediction = response.predictions[i];
+          if (prediction.closest_image_distance < closestDistance) {
+            closestDistance = prediction.closest_image_distance;
+            bestPrediction = prediction;
+          }
+        }
+
+        if (bestPrediction.closest_image) {
+          $lookAlikeImg.attr('src', bestPrediction.closest_image);
           setTimeout(() => {
-            $celebrityNameParagraph.text(prediction.name).fadeIn();
+            $celebrityNameParagraph.text(bestPrediction.name).fadeIn();
             $youLookLikeParagraph.fadeIn();
           }, 1500)
         }
       }
-      //alert(response.predictions)
     }).fail(function(response) {
       alert('Server communication error');
       console.error(response);

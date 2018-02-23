@@ -9,8 +9,13 @@ from keras.utils.data_utils import get_file
 from keras_vggface import utils
 from keras_vggface.utils import V2_LABELS_PATH, VGGFACE_DIR
 from resizeimage.resizeimage import resize_cover
+from sklearn.externals import joblib
 
 import settings
+
+
+def load_feature_descriptors(folder_name):
+    return joblib.load(os.path.join(settings.VGGFACE2_TRAIN_PATH, folder_name, 'feature_vectors.pkl'))
 
 
 def load_image_from_disk(file_path):
