@@ -113,7 +113,12 @@
   // Docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   if (navigator.mediaDevices) {
     // Access the camera
-    navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}})
+    const videoConfig = {
+      facingMode: "user",
+      width: {ideal: 1920},
+      height: {ideal: 1080}
+    };
+    navigator.mediaDevices.getUserMedia({video: videoConfig})
       .then(function (stream) {
         // permission granted
         video.srcObject = stream;
