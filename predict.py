@@ -6,7 +6,8 @@ from keras.preprocessing import image
 from keras_vggface import utils
 from keras_vggface.vggface import VGGFace
 from sklearn.neighbors import KNeighborsClassifier
-from helpers import base64_png_image_to_pillow_image, load_image_references, load_labels, load_feature_descriptors
+from helpers import base64_png_image_to_pillow_image, load_image_references, load_labels, load_feature_descriptors, \
+    load_image_resolutions
 from settings import DESIRED_DIMENSIONS
 from sklearn.neighbors import NearestNeighbors
 
@@ -66,10 +67,35 @@ class Classifier:
     def get_closest_celebrity_image(self, image_references, input_feature_vectors):
         folder_name = image_references[0][0]
         feature_vectors = load_feature_descriptors(folder_name)
-        nearest_neighbours_model = NearestNeighbors(n_neighbors=1, algorithm='brute').fit(feature_vectors)
+        image_resolutions = load_image_resolutions(folder_name)
+        nearest_neighbours_model = NearestNeighbors(n_neighbors=8, algorithm='brute').fit(feature_vectors)
         vector_distances, neighbour_indexes = nearest_neighbours_model.kneighbors(input_feature_vectors)
         neighbour_distances_for_first_input = vector_distances[0]
         neighbour_indexes_for_first_input = neighbour_indexes[0]
-        distance = neighbour_distances_for_first_input[0]
-        index = neighbour_indexes_for_first_input[0]
-        return image_references[index], distance
+
+        fallback_distance = None
+        fallback_index = None
+        highest_min_resolution = 1
+        best_index = None
+        best_distance = None
+        for i in range(len(neighbour_distances_for_first_input)):
+            index = neighbour_indexes_for_first_input[i]
+            resolution = image_resolutions[index]  # (width, height) tuple
+            min_dimension = min(resolution)
+            # filter out images with very low resolution
+            if min_dimension < 250:
+                if min_dimension > highest_min_resolution:
+                    highest_min_resolution = min_dimension
+                    fallback_index = index
+                    fallback_distance = neighbour_distances_for_first_input[i]
+                continue
+            best_index = index
+            best_distance = neighbour_distances_for_first_input[i]
+            break
+
+        # In case all proposed images were low-res, pick the one with the highest resolution
+        if best_index is None:
+            best_index = fallback_index
+            best_distance = fallback_distance
+
+        return image_references[best_index], best_distance

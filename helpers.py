@@ -18,6 +18,10 @@ def load_feature_descriptors(folder_name):
     return joblib.load(os.path.join(settings.VGGFACE2_TRAIN_PATH, folder_name, 'feature_vectors.pkl'))
 
 
+def load_image_resolutions(folder_name):
+    return joblib.load(os.path.join(settings.VGGFACE2_TRAIN_PATH, folder_name, 'resolutions.pkl'))
+
+
 def load_image_from_disk(file_path):
     that_image = Image.open(file_path)
 
