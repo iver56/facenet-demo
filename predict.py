@@ -5,11 +5,12 @@ from keras.engine import Model
 from keras.preprocessing import image
 from keras_vggface import utils
 from keras_vggface.vggface import VGGFace
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import NearestNeighbors
+
 from helpers import base64_png_image_to_pillow_image, load_image_references, load_labels, load_feature_descriptors, \
     load_image_resolutions
 from settings import DESIRED_DIMENSIONS
-from sklearn.neighbors import NearestNeighbors
+
 
 class Classifier:
     def __init__(self):
@@ -26,6 +27,8 @@ class Classifier:
     def predict(self, base64_png):
         # Convert base64 to Pillow image instance
         that_image = base64_png_image_to_pillow_image(base64_png)
+
+        assert that_image.size[0] == that_image.size[1]  # we assume the image to be square at this point
 
         # Resize image
         that_image.thumbnail(DESIRED_DIMENSIONS)
