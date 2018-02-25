@@ -38,10 +38,13 @@
     const videoWidth = video.videoWidth;
     const videoHeight = video.videoHeight;
     const minVideoDim = Math.min(video.videoWidth, video.videoHeight);
+    const videoScaler = 1.5;  // digital zoom
+    const croppedSize = minVideoDim / videoScaler;
+    const croppedDiff = minVideoDim - croppedSize;
     const xDiff = videoWidth - minVideoDim;
-    const xOffset = xDiff / 2;
+    const xOffset = xDiff / 2 + croppedDiff / 2;
     const yDiff = videoHeight - minVideoDim;
-    const yOffset = yDiff / 2;
+    const yOffset = yDiff / 2 + croppedDiff / 2;
 
     canvas = canvas || document.createElement('canvas');
     canvas.width = minVideoDim;
@@ -52,8 +55,8 @@
       video,  // drawable source
       xOffset,  // source offset x
       yOffset,  // source offset y
-      minVideoDim,  // source width
-      minVideoDim,  // source height
+      croppedSize,  // source width
+      croppedSize,  // source height
       0,  // destination offset x
       0,  // destination offset y
       minVideoDim,  // destination width
