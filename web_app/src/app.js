@@ -9,7 +9,7 @@
   const $youLookLikeParagraph = $('.you-look-like');
   const $celebrityNameParagraph = $('.celebrity-name');
   const $replayButton = $('#replay-button');
-  let isReadyForSnapshot = true;
+  let isReadyForSnapshot = false;
   let lastSnapshot = null;
   let lastResponse = null;
 
@@ -33,6 +33,7 @@
   const startSnapshotAnimation = (dataUrl) => {
     isReadyForSnapshot = false;
     video.pause();
+    $replayButton.hide();
     $snapshotImg.attr('src', dataUrl);
     lastSnapshot = dataUrl;
     $snapshotImg.addClass('active');
@@ -58,12 +59,13 @@
     setTimeout(reset, offset + 2500 * response.predictions.length);
   };
 
-  const replay = () => {
+  const replay = (event) => {
     if (lastResponse === null) {
       return;
     }
     startSnapshotAnimation(lastSnapshot);
     setTimeout(() => {showSequence(lastResponse)}, 900);
+    event.stopPropagation();
   };
 
   /**
@@ -138,7 +140,9 @@
       .then(function (stream) {
         // permission granted
         video.srcObject = stream;
+        isReadyForSnapshot = true;
 
+        document.addEventListener('click', takeSnapshot);
         document.addEventListener('keydown', (event) => {
           if (event.keyCode === 32) {
             event.preventDefault();
