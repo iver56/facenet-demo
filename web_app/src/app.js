@@ -8,6 +8,7 @@
   const $callToActionParagraph = $('.call-to-action');
   const $youLookLikeParagraph = $('.you-look-like');
   const $celebrityNameParagraph = $('.celebrity-name');
+  const $replayButton = $('#replay-button');
   let isReadyForSnapshot = true;
   let lastSnapshot = null;
   let lastResponse = null;
@@ -26,9 +27,22 @@
       $callToActionParagraph.fadeIn(800);
     }, 400);
     isReadyForSnapshot = true;
+    $replayButton.fadeIn();
   }
 
-  const showSequence = (response, initZIndexes = true, offset = 1500) => {
+  const startSnapshotAnimation = (dataUrl) => {
+    isReadyForSnapshot = false;
+    video.pause();
+    $snapshotImg.attr('src', dataUrl);
+    lastSnapshot = dataUrl;
+    $snapshotImg.addClass('active');
+    $lookAlikeImg.addClass('active');
+    snapshotSound.play();
+    $callToActionParagraph.fadeOut(800);
+    $(video).hide();
+  };
+
+  const showSequence = (response, initZIndexes = true, offset = 1200) => {
     for (let i = 0; i < response.predictions.length; i++) {
       const prediction = response.predictions[i];
       if (initZIndexes) {
@@ -42,6 +56,14 @@
       }, offset + 2500 * i);
     }
     setTimeout(reset, offset + 2500 * response.predictions.length);
+  };
+
+  const replay = () => {
+    if (lastResponse === null) {
+      return;
+    }
+    startSnapshotAnimation(lastSnapshot);
+    setTimeout(() => {showSequence(lastResponse)}, 900);
   };
 
   /**
@@ -82,13 +104,9 @@
     );
 
     const dataUrl = canvas.toDataURL('image/png');
-    $snapshotImg.attr('src', dataUrl);
-    $snapshotImg.addClass('active');
-    $lookAlikeImg.addClass('active');
-    snapshotSound.play();
-    $callToActionParagraph.fadeOut(800);
 
-    $(video).hide();
+    startSnapshotAnimation(dataUrl);
+
     const base64Png = dataUrl.replace('data:image/png;base64,', '');
     $.ajax({
       url: "/classify/",
@@ -99,6 +117,7 @@
     }).done(function(response) {
       if (response && response.predictions && response.predictions.length) {
         showSequence(response);
+        lastResponse = response;
       }
     }).fail(function(response) {
       alert('Server communication error');
@@ -126,6 +145,7 @@
             takeSnapshot();
           }
         });
+        $replayButton.click(replay);
       })
       .catch(function (error) {
         // permission denied

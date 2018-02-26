@@ -107,6 +107,16 @@ p.celebrity-name {
     animation-fill-mode: forwards;
 }
 
+#replay-button {
+    position: absolute;
+    right: 2vw;
+    bottom: 2vw;
+    width: 5vw;
+    height: 5vw;
+    cursor: pointer;
+    display: none;
+}
+
 @keyframes snapshot-animation {
     0% {
         transform: rotate(0deg) rotateY(180deg);
