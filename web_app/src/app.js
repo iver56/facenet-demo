@@ -9,6 +9,8 @@
   const $youLookLikeParagraph = $('.you-look-like');
   const $celebrityNameParagraph = $('.celebrity-name');
   let isReadyForSnapshot = true;
+  let lastSnapshot = null;
+  let lastResponse = null;
 
   /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
   particlesJS.load('body', 'style/particlesjs-config.json', function() {});
@@ -25,6 +27,22 @@
     }, 400);
     isReadyForSnapshot = true;
   }
+
+  const showSequence = (response, initZIndexes = true, offset = 1500) => {
+    for (let i = 0; i < response.predictions.length; i++) {
+      const prediction = response.predictions[i];
+      if (initZIndexes) {
+        $lookAlikeImg.eq(i).attr('src', prediction.closest_image).css('z-index', i === 0 ? 1 : 0);
+      }
+      setTimeout(() => {
+        $lookAlikeImg.css('z-index', 0);
+        $lookAlikeImg.eq(i).css('z-index', 1);
+        $celebrityNameParagraph.text(response.predictions[i].name).fadeIn(400);
+        $youLookLikeParagraph.fadeIn(400);
+      }, offset + 2500 * i);
+    }
+    setTimeout(reset, offset + 2500 * response.predictions.length);
+  };
 
   /**
    *  Generates a still frame image from the stream in the <video>
@@ -80,28 +98,7 @@
       contentType: 'application/json'
     }).done(function(response) {
       if (response && response.predictions && response.predictions.length) {
-        const sequence = (initZIndexes = true, offset = 1500) => {
-          for (let i = 0; i < response.predictions.length; i++) {
-            const prediction = response.predictions[i];
-            if (initZIndexes) {
-              $lookAlikeImg.eq(i).attr('src', prediction.closest_image).css('z-index', i === 0 ? 1 : 0);
-            }
-            setTimeout(() => {
-              $lookAlikeImg.css('z-index', 0);
-              $lookAlikeImg.eq(i).css('z-index', 1);
-              $celebrityNameParagraph.text(response.predictions[i].name).fadeIn(400);
-              $youLookLikeParagraph.fadeIn(400);
-
-              /*
-              if (i === response.predictions.length - 1) {
-                sequence(false, 2500);
-              }
-              */
-            }, offset + 2500 * i);
-          }
-          setTimeout(reset, offset + 2500 * response.predictions.length);
-        };
-        sequence();
+        showSequence(response);
       }
     }).fail(function(response) {
       alert('Server communication error');
