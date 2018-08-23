@@ -1,5 +1,5 @@
 import base64
-import io
+import six
 import os
 
 import numpy as np
@@ -39,8 +39,9 @@ def load_image_from_disk(file_path):
 
 
 def base64_png_image_to_pillow_image(base64_string):
+    """Convert a base64 string (that represents a PNG image) to a Pillow Image instance."""
     img_data = base64.b64decode(str(base64_string))  # Decode base64
-    image = Image.open(io.BytesIO(img_data))  # Decode the PNG data
+    image = Image.open(six.BytesIO(img_data))  # Decode the PNG data
     return image
 
 
