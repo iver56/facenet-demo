@@ -49,7 +49,7 @@ class Classifier:
 
         return decoded_prediction
 
-    def decode_prediction(self, prediction, feature_vectors, top=5):
+    def decode_prediction(self, prediction, feature_vectors, top=4):
         top_indices = list(prediction.argsort()[-top:][::-1])
 
         celebrities = []
